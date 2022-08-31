@@ -48,6 +48,10 @@
     border-right: 2px solid black;
   }
 
+  .errorBorderColor {
+    border-bottom: 2px solid red;
+  }
+
   .dialog {
     outline-color: teal;
     display: block;

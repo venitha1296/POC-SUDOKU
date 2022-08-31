@@ -36,11 +36,15 @@ const box_color = {
 function Game(props) {
     let _ = require('lodash'); 
     let complete = false;
+    let error_color = [];
     let initial = props.board; // getting input value based on difficluty
     const [randomArray,setRandomArray] = useState(initial);
+    const [row_array,setRowErrorArray] = useState(error_color);
+    const [col_array,setColErrorArray] = useState(error_color);
+
     let array = [0,1,2,3,4,5,6,7,8];
     let count = 0;
-
+    let rows = [],cols = [];
     const getSudokuArray = (arr) => {
         return JSON.parse(JSON.stringify(arr));
     }
@@ -64,13 +68,25 @@ function Game(props) {
 
     const rowCheck = (grid,num) =>{ //checking whether each row has unique values
       let row_check_array = _.without(grid[num],-1,0);  
-      return _.uniq(row_check_array).length == row_check_array.length;
+      if(_.uniq(row_check_array).length == row_check_array.length){
+        return true;
+      }
+      else{
+        rows.push(num);
+        return false;
+      }
     }
 
     const colCheck = (grid,num) =>{ //checking whether each column has unique values
       const arrayColumn = (arr, n) => arr.map((x) => x[n]);
       let col_check_array = _.without(arrayColumn(grid, num),-1,0);
-      return _.uniq(col_check_array).length == col_check_array.length;
+      if(_.uniq(col_check_array).length == col_check_array.length){
+        return true;
+      }
+      else{
+        cols.push(num);
+        return false;
+      }
     }
 
     const checkValid = (grid,num) =>{  // checking unique value(based on row,col,and box(3x3))
@@ -92,12 +108,16 @@ function Game(props) {
       setRandomArray(reset_array);
     }
 
-    const solvedArray = (grid,row = 0,col = 0) => {    
+    const solvedArray = (grid,row = 0,col = 0) => {  
         for(let n=0;n<9;n++){   
           if(checkValid(grid,n) == 1){
             [row,col] = getNextData(row,col);
-          }           
-        }  
+          }     
+          else{
+            setRowErrorArray(rows);
+            setColErrorArray(cols)
+          }      
+        }       
     }
   
     const isComplete = (grid) => { // To check whether all cell is filled with correct value
@@ -118,6 +138,10 @@ function Game(props) {
       else{
         complete = isComplete(randomArray);
         solvedArray(randomArray);
+        if(count == 0){
+          setRowErrorArray(error_color);
+          setColErrorArray(error_color);
+        }
         if(complete && count == 0){
           ToastAlert("success", "Congrats!You have solved the puzzle.");
           setRandomArray(temp_array);
@@ -144,15 +168,15 @@ function Game(props) {
             <div className='logo'>Sudoku Game</div>
             <nav className='nav'><Back /></nav>
         </header>
-        <main className='main'>     
+        <main className='main'>    
           <table>
             <tbody>
-              {
+              { 
                 array.map((row,rowIndex) => {
-                  return  <tr key={rowIndex} className={(row +1) % 3 == 0 ? 'rBorder' : ''}>
+                  return  <tr key={rowIndex} className={(row +1) % 3 == 0 ? 'rBorder' : row_array.includes(row) ? 'errorBorderColor' : ''}>
                     {
                       array.map((col,colIndex) => {
-                        return <td key = {rowIndex + colIndex} className={(col+1) % 3 == 0 ? 'cBorder': ''}>
+                        return <td key = {rowIndex + colIndex} className={(col+1) % 3 == 0 ? 'cBorder': col_array.includes(col) ? 'errorBorderColor' :''}>
                            <input 
                             onChange = {(e)=>editBox(e,row,col)}
                             className = 'cellInput' 
