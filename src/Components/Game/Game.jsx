@@ -105,6 +105,8 @@ function Game(props) {
 
     const onClearSuduku = () => { // Empty all values
       let reset_array = getSudokuArray(initial);
+      setRowErrorArray(error_color);
+      setColErrorArray(error_color);
       setRandomArray(reset_array);
     }
 
@@ -133,6 +135,8 @@ function Game(props) {
       let temp_array = getSudokuArray(initial);
       if(_.isEqual(temp_array,randomArray)){
         ToastAlert("warning", "No values Enter!");
+        setRowErrorArray(error_color);
+        setColErrorArray(error_color);
         setRandomArray(initial);
       }
       else{
@@ -173,14 +177,14 @@ function Game(props) {
             <tbody>
               { 
                 array.map((row,rowIndex) => {
-                  return  <tr key={rowIndex} className={(row +1) % 3 == 0 ? 'rBorder' : row_array.includes(row) ? 'errorBorderColor' : ''}>
+                  return  <tr key={rowIndex} className={(row +1) % 3 == 0 ? 'rBorder'  : ''}>
                     {
                       array.map((col,colIndex) => {
-                        return <td key = {rowIndex + colIndex} className={(col+1) % 3 == 0 ? 'cBorder': col_array.includes(col) ? 'errorBorderColor' :''}>
+                        return <td key = {rowIndex + colIndex} className={(col+1) % 3 == 0 ? 'cBorder': ''}>
                            <input 
                             onChange = {(e)=>editBox(e,row,col)}
                             className = 'cellInput' 
-                            style={{backgroundColor: getBoxColor(row, col)}}
+                            style={row_array.includes(row) || col_array.includes(col)? {backgroundColor: 'red'} :{backgroundColor: getBoxColor(row, col)} }
                             value={randomArray[row][col] === -1 || randomArray[row][col] === '0' || randomArray[row][col] === 0 ? '' : randomArray[row][col] }  
                             disabled = {initial[row][col] != -1 && initial[row][col] != '0'}
                            />
