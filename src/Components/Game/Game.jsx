@@ -37,10 +37,23 @@ function Game(props) {
     let _ = require('lodash'); 
     let complete = false;
     let error_color = [];
-    let initial = props.board; // getting input value based on difficluty
+    // let initial = props.board; // getting input value based on difficluty
+    const name=props.name;
+    let initial = [
+      [-1, 5, -1, 9, -1, -1, -1, -1, -1],
+      [8, -1, -1, -1, 4, -1, 3, -1, 7],
+      [-1, -1, -1, 2, 8, -1, 1, 9, -1],
+      [5, 3, 8, 6, -1, 7, 9, 4, -1],
+      [-1, 2, -1, 3, -1, 1, -1, -1, -1],
+      [1, -1, 9, 8, -1, 4, 6, 2, 3],
+      [9, -1, 7, 4, -1, -1, -1, -1, -1],
+      [-1, 4, 5, -1, -1, -1, 2, -1, 9],
+      [-1, -1, -1, -1, 3, -1, -1, 7, -1]
+    ]
     const [randomArray,setRandomArray] = useState(initial);
     const [row_array,setRowErrorArray] = useState(error_color);
     const [col_array,setColErrorArray] = useState(error_color);
+    const [win_color,setWinColor] = useState(0);
 
     let array = [0,1,2,3,4,5,6,7,8];
     let count = 0;
@@ -108,6 +121,7 @@ function Game(props) {
       setRowErrorArray(error_color);
       setColErrorArray(error_color);
       setRandomArray(reset_array);
+      setWinColor(0);
     }
 
     const solvedArray = (grid,row = 0,col = 0) => {  
@@ -133,10 +147,13 @@ function Game(props) {
 
     const onSolveSuduku = () => { 
       let temp_array = getSudokuArray(initial);
+      let message = ''
       if(_.isEqual(temp_array,randomArray)){
-        ToastAlert("warning", "No values Enter!");
+        message = "Oh! "+name+", You did not enter any value";
+        ToastAlert("error", message);
         setRowErrorArray(error_color);
         setColErrorArray(error_color);
+        setWinColor(0);
         setRandomArray(initial);
       }
       else{
@@ -144,17 +161,24 @@ function Game(props) {
         solvedArray(randomArray);
         if(count == 0){
           setRowErrorArray(error_color);
+          setWinColor(0);
           setColErrorArray(error_color);
         }
         if(complete && count == 0){
-          ToastAlert("success", "Congrats!You have solved the puzzle.");
-          setRandomArray(temp_array);
+          setWinColor(1);
+          message = "Wow Congrats! "+name+", You have solved the puzzle.";
+          ToastAlert("success", message);
+          // setRandomArray(temp_array);
         }
         else if(count > 0){
-          ToastAlert("error", "Oh! Duplicate value.Please Check it.");
+          setWinColor(0);
+          message = "Oh! "+name+", Duplicate value.Please Check it";
+          ToastAlert("error", message);
         }
         else{
-          ToastAlert("info", "Keep going!");
+          setWinColor(0);
+          message = "Superb "+name+", Keep going!";
+          ToastAlert("info", message);
         }
       }
      
@@ -170,6 +194,11 @@ function Game(props) {
       <Fragment>
         <header className='header'>
             <div className='logo'>Sudoku Game</div>
+             {
+                name != undefined &&
+                  <div className="welcome">Welcome, {name}</div>
+              
+              }   
             <nav className='nav'><Back /></nav>
         </header>
         <main className='main'>    
@@ -184,7 +213,7 @@ function Game(props) {
                            <input 
                             onChange = {(e)=>editBox(e,row,col)}
                             className = 'cellInput' 
-                            style={row_array.includes(row) || col_array.includes(col)? {backgroundColor: 'red'} :{backgroundColor: getBoxColor(row, col)} }
+                            style={row_array.includes(row) || col_array.includes(col)? {backgroundColor: 'red'} :win_color == 1 ? {backgroundColor: 'green'} : {backgroundColor: getBoxColor(row, col)} }
                             value={randomArray[row][col] === -1 || randomArray[row][col] === '0' || randomArray[row][col] === 0 ? '' : randomArray[row][col] }  
                             disabled = {initial[row][col] != -1 && initial[row][col] != '0'}
                            />

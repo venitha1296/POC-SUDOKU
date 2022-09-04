@@ -895,8 +895,9 @@ const getBoard = (status) =>{
         }
 }
     
-function Board () {
+function Board (props) {
     let status = useSelector(state => state.difficulty_level); // get updated value automatically from store
+    let name = useSelector(state => state.name);
     let board = getBoard(status);
     let  numberArray=[];
     let length = board.length;
@@ -905,7 +906,7 @@ function Board () {
     );
     const initial_board = _.chunk(numberArray, 9); // Getting 9x9 array from input array
     return (
-        <Game board={initial_board}/>
+        <Game board={initial_board} name={name}/>
     );      
 }
     

@@ -1,23 +1,34 @@
 import {createStore} from 'redux';
 
-const getDifficulty = (state = {difficulty_level : 1},action) => {
+const getDifficulty = (state = {difficulty_level : 1,name : ''},action) => {
 
     if(action.type === 'easy'){
         return {
-            difficulty_level : 1
+            ...state,
+            difficulty_level : 1,
         }
     }
-    if(action.type === 'medium'){
+    else if(action.type === 'medium'){
         return {
-            difficulty_level : 2
+            ...state,
+            difficulty_level : 2,
         }
     }
-    if(action.type === 'hard'){
+    else if(action.type === 'hard'){
         return {
-            difficulty_level : 3
+            ...state,
+            difficulty_level : 3,
         }
     }
-    return state;
+    else{
+        if(localStorage.getItem('Name') == 'undefined' || localStorage.getItem('Name') == null)
+           localStorage.setItem('Name',action.payload)
+        return{
+            ...state,
+            difficulty_level : 1,
+            name: (localStorage.getItem('Name') != 'undefined') ? localStorage.getItem('Name') : action.payload 
+        }
+    }  
 }
 
 const store = createStore(getDifficulty);

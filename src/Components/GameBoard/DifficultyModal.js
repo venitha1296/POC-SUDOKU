@@ -4,7 +4,7 @@ import '../Game.css';
 import store from '../../Reducer/Store';
 import { Link } from "react-router-dom";
 
-function DifficultyModal() {
+function DifficultyModal(props) {
   const [show, setShow] = useState(false);
   const [status,setStatus] = useState(0);
 
@@ -30,7 +30,7 @@ function DifficultyModal() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Please, choose the difficulty:</Modal.Title>
+          <Modal.Title> Hi {props.name}, Please choose the difficulty:</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Container>

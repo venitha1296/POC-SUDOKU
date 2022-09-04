@@ -35,3 +35,8 @@
 .nav a.active {
   color: #e6fcfc;
 }
+
+.welcome {
+  color: black;
+  font-size: 20px;
+}
