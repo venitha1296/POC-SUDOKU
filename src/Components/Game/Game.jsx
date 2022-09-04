@@ -37,19 +37,9 @@ function Game(props) {
     let _ = require('lodash'); 
     let complete = false;
     let error_color = [];
-    // let initial = props.board; // getting input value based on difficluty
+    let initial = props.board; // getting input value based on difficluty
+    
     const name=props.name;
-    let initial = [
-      [-1, 5, -1, 9, -1, -1, -1, -1, -1],
-      [8, -1, -1, -1, 4, -1, 3, -1, 7],
-      [-1, -1, -1, 2, 8, -1, 1, 9, -1],
-      [5, 3, 8, 6, -1, 7, 9, 4, -1],
-      [-1, 2, -1, 3, -1, 1, -1, -1, -1],
-      [1, -1, 9, 8, -1, 4, 6, 2, 3],
-      [9, -1, 7, 4, -1, -1, -1, -1, -1],
-      [-1, 4, 5, -1, -1, -1, 2, -1, 9],
-      [-1, -1, -1, -1, 3, -1, -1, 7, -1]
-    ]
     const [randomArray,setRandomArray] = useState(initial);
     const [row_array,setRowErrorArray] = useState(error_color);
     const [col_array,setColErrorArray] = useState(error_color);
