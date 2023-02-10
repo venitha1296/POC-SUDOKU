@@ -1,5 +1,5 @@
 import React, { useState,Component } from 'react';
-import {Modal,Button,Container ,Row,Col, Form} from 'react-bootstrap';
+import {Modal,Button, Form} from 'react-bootstrap';
 import '../Game.css';
  
 class Register extends React.Component {
