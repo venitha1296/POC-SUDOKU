@@ -43,7 +43,7 @@ const Home = () => {
         </li>  
          }   
          {
-          name == undefined && 
+          name != undefined && 
           <li><DifficultyModal name={name}/> </li>   
          }     
         </ul>      
