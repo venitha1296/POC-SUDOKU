@@ -42,8 +42,10 @@ const Home = () => {
             /> : ''}
         </li>  
          }   
-           
-          <li><DifficultyModal name={name}/> </li>        
+         {
+          name == undefined && 
+          <li><DifficultyModal name={name}/> </li>   
+         }     
         </ul>      
       </nav>
      </header>
